@@ -19,7 +19,7 @@ resource "local_file" "private_key-public_kp" {
 }
 
 module "instance" {
-  source        = "github.com/drajcan-nephthys/kis-onpk/terraform/modules/compute"
+  source        = "terraform/modules/compute"
   project       = local.project
   environment   = var.environment
   my_public_ip  = data.http.my_public_ip.response_body

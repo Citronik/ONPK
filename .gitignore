@@ -1,4 +1,22 @@
-*auto.tfvars
+pkg/
+Gemfile.lock
+vendor/
+spec/fixtures/
+.bundle/
+coverage/
+.idea/
+*.iml
+*.log
+
+### SSH
+*.pem
+
+### Vagrant
+.vagrant/
+
+### Terraform
 *.tfvars
-*.tfstate
-*.tfstate.backup
+.terraform/
+terraform.tfstate.d/
+terraform.tfstate
+terraform.tfstate.backup
