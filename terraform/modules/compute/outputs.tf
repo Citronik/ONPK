@@ -29,11 +29,3 @@ output "instance_security_group_id" {
 output "user_data_logs_path" {
   value = "/var/log/cloud-init-output.log"
 }
-
-output "ssh_command" {
-  value = "ssh -i ${abspath(".")}/${var.key_pair_name}.pem ${local.image.ubuntu.os_username}@${openstack_compute_instance_v2.instance.access_ip_v4}"
-}
-output "private_instance_key" {
-  value     = openstack_compute_keypair_v2.private_instance_keypair.private_key
-  sensitive = true
-}
