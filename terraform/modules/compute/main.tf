@@ -16,33 +16,36 @@ resource "openstack_networking_secgroup_v2" "security_group_onpk_private" {
 }
 
 resource "openstack_networking_secgroup_rule_v2" "security_group_rule_kis_icmp" {
+  depends_on = [ openstack_compute_instance_v2.public_instance ]
   description       = "Managed by Terraform!"
   direction         = "ingress"
   ethertype         = "IPv4"
   protocol          = "icmp"
-  remote_ip_prefix  = var.private_cidr
+  remote_ip_prefix  = openstack_compute_instance_v2.public_instance.network.0.fixed_ip_v4
   security_group_id = openstack_networking_secgroup_v2.security_group_onpk_private.id
 }
 
 resource "openstack_networking_secgroup_rule_v2" "security_group_rule_kis_ssh" {
+  depends_on = [ openstack_compute_instance_v2.public_instance ]
   description       = "Managed by Terraform!"
   direction         = "ingress"
   ethertype         = "IPv4"
   protocol          = "tcp"
   port_range_min    = 22
   port_range_max    = 22
-  remote_ip_prefix  = var.private_cidr
+  remote_ip_prefix  = openstack_compute_instance_v2.public_instance.network.0.fixed_ip_v4
   security_group_id = openstack_networking_secgroup_v2.security_group_onpk_private.id
 }
 
 resource "openstack_networking_secgroup_rule_v2" "security_group_rule_kis_http" {
+  depends_on = [ openstack_compute_instance_v2.public_instance ]
   description       = "Managed by Terraform!"
   direction         = "ingress"
   ethertype         = "IPv4"
   protocol          = "tcp"
   port_range_min    = 80
   port_range_max    = 80
-  remote_ip_prefix  = local.kis.network.cidr
+  remote_ip_prefix  = openstack_compute_instance_v2.public_instance.network.0.fixed_ip_v4
   security_group_id = openstack_networking_secgroup_v2.security_group_onpk_private.id
 }
 
@@ -76,23 +79,15 @@ resource "openstack_compute_secgroup_v2" "security_group_onpk_public" {
   }
 }
 
-resource "openstack_compute_keypair_v2" "private_instance_keypair" {
-  name = "${var.project}-${var.environment}-keypair"
-}
-
-resource "openstack_compute_keypair_v2" "public_instance_keypair" {
-  name = "${var.project}-${var.environment}-keypair"
-}
-
 resource "openstack_compute_instance_v2" "private_instance" {
+  depends_on = [ openstack_networking_secgroup_v2.security_group_onpk_private, openstack_compute_instance_v2.public_instance ]
   name            = "${var.project}-${var.environment}-private_instance"
   image_id        = data.openstack_images_image_v2.image.id
   flavor_id       = data.openstack_compute_flavor_v2.flavor.id
-  key_pair        = data.openstack_compute_keypair_v2.kp.name
+  key_pair        = var.private_kp.name
   security_groups = [ openstack_networking_secgroup_v2.security_group_onpk_private.id ]
 
-  metadata = {
-  }
+  user_data  = var.user_data_1
 
   network {
     name = data.openstack_networking_network_v2.private_network.name
@@ -103,11 +98,10 @@ resource "openstack_compute_instance_v2" "public_instance" {
   name            = "${var.project}-${var.environment}-public_instance"
   image_id        = data.openstack_images_image_v2.image.id
   flavor_id       = data.openstack_compute_flavor_v2.flavor.id
-  key_pair        = data.openstack_compute_keypair_v2.kp.name
+  key_pair        = data.openstack_compute_keypair_v2.public_kp.name
   security_groups = [ openstack_compute_secgroup_v2.security_group_onpk_public.id ]
 
-  metadata = {
-  }
+  user_data  = var.user_data_2
 
   network {
     name = data.openstack_networking_network_v2.public_network.name

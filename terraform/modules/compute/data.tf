@@ -14,10 +14,6 @@ data "openstack_images_image_v2" "image" {
   name = local.kis.instance.image.ubuntu.name
 }
 
-data "openstack_compute_keypair_v2" "kp" {
-  name = openstack_compute_keypair_v2.private_instance_keypair.name
-}
-
 data "openstack_compute_flavor_v2" "flavor_mini" {
   name = local.kis.instance.flavor_mini_name
 }

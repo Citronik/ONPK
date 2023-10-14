@@ -27,3 +27,11 @@ variable "project" {
 variable "environment" {
   type = string
 }
+
+variable "user_data_1" {
+  type = string
+}
+
+variable "user_data_2" {
+  type = string
+}
