@@ -1,16 +1,5 @@
 # --- variables.tf ---
 
-variable "username" {
-  type = string
-}
-variable "tenant_name" {
-  type = string
-}
-
-variable "password" {
-  type = string
-}
-
 # Default: ext-net-154 (public network -> instance is connected to the public internet)
 variable "public_network_name" {
   type = string
@@ -25,5 +14,21 @@ variable "project" {
 }
 
 variable "environment" {
+  type = string
+}
+
+variable "public_instance-kp" {
+  type = string
+}
+
+variable "private_instance-kp" {
+  type = string
+}
+
+variable "user_data_private_instance" {
+  type = string
+}
+
+variable "user_data_public_instance" {
   type = string
 }

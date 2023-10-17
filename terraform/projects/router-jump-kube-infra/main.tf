@@ -44,10 +44,18 @@ data "cloudinit_config" "user_data_2" {
 
 }
 
+# resource "local_file" "public_key-private_kp" {
+#   filename        = "${path.module}/${var.project}-${var.environment}-private_kp-public.pem"
+# }
+
 resource "openstack_compute_keypair_v2" "private_kp" {
   name       = "${var.project}-${var.environment}-private_kp"
   public_key = var.public_key-private_kp
 }
+
+# resource "local_file" "public_key-public_kp" {
+#   filename        = "${path.module}/${var.project}-${var.environment}-public_kp-public.pem"
+# }
 
 resource "openstack_compute_keypair_v2" "public_kp" {
   name       = "${var.project}-${var.environment}-public_kp"
@@ -57,15 +65,15 @@ resource "openstack_compute_keypair_v2" "public_kp" {
 module "instance" {
   #source        = "github.com/Citronik/ONPK/tree/main/terraform/modules/compute"
   #source = "github.com/Citronik/ONPK/terraform/modules/compute"
-  source              = "../../modules/compute"
-  project             = var.project
-  environment         = var.environment
-  public_network_name = var.public_network_name
-  private_cidr        = var.private_cidr
-  private_kp          = openstack_compute_keypair_v2.private_kp.name
-  public_kp           = openstack_compute_keypair_v2.public_kp.name
-  user_data_1         = data.cloudinit_config.user_data_1.rendered
-  user_data_2         = data.cloudinit_config.user_data_2.rendered
+  source                     = "../../modules/router_compute"
+  project                    = var.project
+  environment                = var.environment
+  public_network_name        = var.public_network_name
+  private_cidr               = var.private_cidr
+  private_instance-kp        = openstack_compute_keypair_v2.private_kp.name
+  public_instance-kp         = openstack_compute_keypair_v2.public_kp.name
+  user_data_private_instance = data.cloudinit_config.user_data_1.rendered
+  user_data_public_instance  = data.cloudinit_config.user_data_2.rendered
 }
 
 # resource "null_resource" "wait_for_minikube" {
