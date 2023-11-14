@@ -2,6 +2,8 @@
 
 K8S_VERSION="v1.28.2"
 
+
+echo "Starting minikube.sh"
 sudo apt-get update
 
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
@@ -29,3 +31,5 @@ source ~/.bashrc
 su - ubuntu -c "minikube start --kubernetes-version=${K8S_VERSION} --nodes=3"
 su - ubuntu -c "minikube addons enable ingress"
 su - ubuntu -c "minikube status"
+
+echo "minikube.sh DONE"

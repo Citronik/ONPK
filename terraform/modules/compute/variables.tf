@@ -33,3 +33,11 @@ variable "public_kp" {
 variable "private_kp" {
   type = string
 }
+
+variable "image" {
+  type = string
+}
+
+variable "flavor" {
+  type = string
+}

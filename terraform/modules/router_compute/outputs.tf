@@ -10,3 +10,11 @@ output "router_IP" {
 output "public_instance_ip" {
   value = data.openstack_networking_floatingip_v2.floating_ip.address
 }
+
+output "private_instance_ip" {
+  value = openstack_compute_instance_v2.private_instance.access_ip_v4
+}
+
+output "private_instance_id" {
+  value = openstack_compute_instance_v2.private_instance.id  
+}

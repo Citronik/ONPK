@@ -58,6 +58,8 @@ module "instance" {
   #source        = "github.com/Citronik/ONPK/tree/main/terraform/modules/compute"
   #source = "github.com/Citronik/ONPK/terraform/modules/compute"
   source              = "../../modules/compute"
+  image               = local.kis.instance.image.debian.name
+  flavor              = local.kis.instance.flavor_name
   project             = var.project
   environment         = var.environment
   public_network_name = var.public_network_name

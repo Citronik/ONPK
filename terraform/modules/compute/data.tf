@@ -7,11 +7,11 @@ data "openstack_networking_network_v2" "private_network" {
 }
 
 data "openstack_compute_flavor_v2" "flavor" {
-  name = local.kis.instance.flavor_name
+  name = var.flavor
 }
 
 data "openstack_images_image_v2" "image" {
-  name = local.kis.instance.image.ubuntu.name
+  name = var.image
 }
 
 data "openstack_compute_flavor_v2" "flavor_mini" {

@@ -32,3 +32,11 @@ variable "user_data_private_instance" {
 variable "user_data_public_instance" {
   type = string
 }
+
+variable "image" {
+  type = string
+}
+
+variable "flavor" {
+  type = string
+}

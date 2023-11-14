@@ -122,8 +122,8 @@ resource "openstack_compute_secgroup_v2" "security_group_onpk_public" {
 
 resource "openstack_compute_instance_v2" "jump_instance" {
   name            = "${var.project}-${var.environment}-jump_instance"
-  image_name      = local.kis.instance.image.ubuntu.name
-  flavor_name     = local.kis.instance.flavor_name
+  image_id        = data.openstack_images_image_v2.image.id
+  flavor_id       = data.openstack_compute_flavor_v2.flavor.id
   key_pair        = var.public_instance-kp
   security_groups = [openstack_compute_secgroup_v2.security_group_onpk_public.id]
 
